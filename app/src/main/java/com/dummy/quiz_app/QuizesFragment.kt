@@ -7,8 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.mvrx.BaseMvRxFragment
 
-class QuizesFragment : Fragment() {
+class QuizesFragment : BaseMvRxFragment() {
+    override fun invalidate() {
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

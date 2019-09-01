@@ -9,6 +9,7 @@ import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
 import com.dummy.quiz_app.R
 import com.dummy.quiz_app.data.Quiz
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.quiz_raw.view.*
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
@@ -22,7 +23,12 @@ class QuizRaw @JvmOverloads constructor(
 
     @ModelProp
     fun setQuiz(quiz: Quiz){
-        quizNameView.text = quiz.name
+        Picasso.with(context)
+            .load(quiz.imageUrl)
+            .resize(1600, 1600)
+            .onlyScaleDown()
+            .into(mainImage)
+        quizNameView.text = quiz.title
         quizInfoView.text = quiz.info
     }
 

@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   xmlns:tools="http://schemas.android.com/tools"
                                    android:orientation="vertical"
                                    android:layout_width="match_parent"
-                                   android:layout_height="match_parent">
+                                   android:layout_height="match_parent"
+                                   android:layout_marginBottom="24dp"
+                                   android:foreground="?android:attr/selectableItemBackground"
+                                   app:cardCornerRadius="8dp"
+                                   app:cardElevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="16dp">
+
+        <ImageView
+                android:id="@+id/mainImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1.33"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="#ff777777" android:contentDescription="@string/main_quiz_image"/>
 
         <TextView
                 android:id="@+id/quizNameView"
@@ -18,10 +34,11 @@
                 android:layout_marginTop="16dp"
                 android:textColor="#ff222222"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginLeft="16dp"/>
+                app:layout_constraintTop_toBottomOf="@id/mainImage"
+                android:layout_marginLeft="16dp"
+                android:paddingRight="20dp"
+                android:paddingEnd="20dp"/>
 
         <TextView
                 android:id="@+id/quizInfoView"
@@ -31,7 +48,9 @@
                 android:textColor="#ff222222"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@id/quizNameView"
-                app:layout_constraintTop_toBottomOf="@id/quizNameView"/>
+                app:layout_constraintTop_toBottomOf="@id/quizNameView"
+                android:paddingRight="20dp"
+                android:paddingEnd="20dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

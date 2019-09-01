@@ -5,9 +5,12 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import androidx.navigation.fragment.findNavController
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
@@ -27,7 +30,7 @@ class QuizesFragment : BaseMvRxFragment() {
                 quizRaw {
                     id(quiz.id)
                     quiz(quiz)
-                    //clickListener{ _ -> findNavController().navigate(R.id.)}
+                    clickListener{ _ -> findNavController().navigate(R.id.action_quizesFragment_to_solvingFragment, SolvingFragment.arg(quiz.id))}
                 }
             }
         }
@@ -39,5 +42,25 @@ class QuizesFragment : BaseMvRxFragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_quizes, container, false)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        return_top_btn.setOnClickListener {
+            quizesRecyclerView.smoothScrollToPosition(0)
+            return_top_btn.visibility = View.GONE
+        }
+        quizesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if ((recyclerView.layoutManager as LinearLayoutManager)
+                        .findFirstVisibleItemPosition() < 2) {
+                    return_top_btn.visibility = View.GONE
+                }
+                else{
+                    return_top_btn.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 }

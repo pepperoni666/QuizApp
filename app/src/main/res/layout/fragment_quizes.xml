@@ -4,14 +4,31 @@
                                                    xmlns:app="http://schemas.android.com/apk/res-auto"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
+                                                   android:background="#E3E9E8"
+                                                   android:animateLayoutChanges="true"
                                                    tools:context=".QuizesFragment">
+
+    <Button
+            android:id="@+id/return_top_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:textColor="#E5E6E6"
+            android:background="@drawable/button_shape"
+            android:text="@string/return_to_top"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAllCaps="false"/>
 
     <com.airbnb.epoxy.EpoxyRecyclerView
             android:id="@+id/quizesRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:clipToPadding="false"
             android:paddingTop="24dp"
             android:paddingBottom="80dp"

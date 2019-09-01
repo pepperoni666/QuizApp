@@ -21,7 +21,7 @@ class QuizesViewModel(
         setState {
             copy(quizes = Loading())
         }
-        GlobalScope.launch(Dispatchers.IO) {
+        quizRepository.launch {
             val list = quizRepository.getQuizes()
             setState {
                 copy(quizes = Success(list))

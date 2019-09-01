@@ -3,6 +3,9 @@ package com.dummy.quiz_app.app
 import android.app.Application
 import android.widget.Toast
 import com.dummy.quiz_app.data.QuizRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class QuizApplication : Application() {
     init {
@@ -14,16 +17,23 @@ class QuizApplication : Application() {
     companion object {
         private var instance: QuizApplication? = null
 
+        /**
+         * Allows to show Toast from anywhere in the project.
+         * @param msg = message to be shown in toast
+         * @param makeLong = flag, if true: toast will be long, elsewise short
+         */
         fun showToast(msg: String, makeLong: Boolean) {
             instance?.let {
-                Toast.makeText(
-                    instance,
-                    msg,
-                    if (makeLong)
-                        Toast.LENGTH_LONG
-                    else
-                        Toast.LENGTH_SHORT
-                ).show()
+                GlobalScope.launch(Dispatchers.Main) {
+                    Toast.makeText(
+                        instance,
+                        msg,
+                        if (makeLong)
+                            Toast.LENGTH_LONG
+                        else
+                            Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

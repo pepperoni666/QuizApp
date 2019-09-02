@@ -26,7 +26,7 @@ class QuizApplication : Application() {
             instance?.let {
                 GlobalScope.launch(Dispatchers.Main) {
                     Toast.makeText(
-                        instance,
+                        it,
                         msg,
                         if (makeLong)
                             Toast.LENGTH_LONG

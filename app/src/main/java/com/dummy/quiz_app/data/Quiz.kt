@@ -15,7 +15,8 @@ data class Answer(
 
 data class Question(
     val text: String,
-    val answers: List<Answer>
+    val answers: List<Answer>,
+    var selected: Int?
 )
 
 data class Quiz (
@@ -24,5 +25,6 @@ data class Quiz (
     val info: String,
     val imageUrl: String,
     val questions: List<Question>,
-    val rates: List<Rate>
+    val rates: List<Rate>,
+    var progress: Int
 )

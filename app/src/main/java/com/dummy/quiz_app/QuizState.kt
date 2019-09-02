@@ -7,4 +7,8 @@ import com.dummy.quiz_app.data.Quiz
 
 data class QuizState (
     val quizes: Async<List<Quiz>> = Uninitialized
-): MvRxState
+): MvRxState{
+    fun quiz(quizId: Long?): Quiz? = quizes()?.firstOrNull { it.id == quizId }
+
+    fun changeProgress(quizId: Long, newProgress: Int) { quizes()?.firstOrNull { it.id == quizId }?.let{ it.progress = newProgress }}
+}

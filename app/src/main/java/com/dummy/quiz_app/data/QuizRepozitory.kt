@@ -39,7 +39,7 @@ class QuizRepository: CoroutineScope by CoroutineScope(Dispatchers.IO) {
                 //every quiz request will run asynchronously
                 val awaitItems = ArrayList<Deferred<Unit>>()
                 items?.let {
-                    for(i: JsonObject in items){
+                    for(i: JsonObject in it){
 
                         awaitItems.add(async{
 
@@ -92,7 +92,8 @@ class QuizRepository: CoroutineScope by CoroutineScope(Dispatchers.IO) {
                                         questions.add(
                                             Question(
                                                 j["text"] as String,
-                                                answers
+                                                answers,
+                                                null
                                             )
                                         )
                                     }
@@ -118,7 +119,8 @@ class QuizRepository: CoroutineScope by CoroutineScope(Dispatchers.IO) {
                                         i["content"] as String,
                                         (i["mainPhoto"] as JsonObject)["url"] as String,
                                         questions,
-                                        rates
+                                        rates,
+                                        0
                                     )
                                 )
                             } catch (e: IOException){
@@ -143,7 +145,7 @@ class QuizRepository: CoroutineScope by CoroutineScope(Dispatchers.IO) {
             QuizApplication.showToast("Connection timeout", true)
         } catch (e: IOException){
             e.message?.let {
-                QuizApplication.showToast(e.message!!, true)
+                QuizApplication.showToast(it, true)
             }
         }
 

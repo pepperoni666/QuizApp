@@ -7,4 +7,7 @@
     <string name="return_to_top">return to top</string>
     <string name="next">next</string>
     <string name="previous">previous</string>
+    <string name="finish">finish</string>
+    <string name="main_page">main page</string>
+    <string name="try_again">try again</string>
 </resources>

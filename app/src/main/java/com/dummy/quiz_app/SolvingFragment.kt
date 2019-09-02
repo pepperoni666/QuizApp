@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.airbnb.mvrx.*
 import com.dummy.quiz_app.app.QuizApplication
 import com.dummy.quiz_app.data.Answer
@@ -23,24 +25,41 @@ class SolvingFragment : BaseMvRxFragment() {
     override fun invalidate() = withState(viewModel) { state ->
         try {
             val quiz = state.quiz(quizId) ?: throw IllegalStateException("Cannot find quiz with id $quizId")
+            for (i in radioButtons)
+                i.visibility = View.GONE
+            answer_group.clearCheck()
             current = quiz.progress
+
+            //if progress is greater than questions number, redirect to result
+            if (current == quiz.questions.size) {
+                findNavController().navigate(
+                    R.id.action_solvingFragment_to_resultFragment,
+                    ResultFragment.arg(quizId),
+                    NavOptions.Builder()
+                        .setPopUpTo(
+                            R.id.quizesFragment,
+                            false
+                        ).build()
+                )
+                return@withState
+            }
             progress_number.text = "$current/${quiz.questions.size}"
+            progress_bar.progress = (current.toDouble() / quiz.questions.size.toDouble() * 100).toInt()
+            next_btn.text =
+                if (current == quiz.questions.size - 1) getString(R.string.finish) else getString(R.string.next)
             question.text = quiz.questions[current].text
-            for(i in quiz.questions[current].answers.indices){
+            for (i in quiz.questions[current].answers.indices) {
                 radioButtons[i].visibility = View.VISIBLE
                 radioButtons[i].text = quiz.questions[current].answers[i].text
-            }
-
-            if(quiz.questions[current].selected != null){
-                next_btn.isEnabled = true
-                for(i in radioButtons){
-                    i.isChecked = quiz.questions[current].selected == radioButtons.indexOf(i)
+                quiz.questions[current].selected.let {
+                    if (i == it)
+                        answer_group.check(radioButtons[i].id)
                 }
             }
-            else
-                next_btn.isEnabled = false
+
+            next_btn.isEnabled = quiz.questions[current].selected != null
             prev_btn.isEnabled = current != 0
-        }catch (e: IllegalStateException) {
+        } catch (e: IllegalStateException) {
             e.message?.let {
                 QuizApplication.showToast(it, true)
             }
@@ -59,28 +78,36 @@ class SolvingFragment : BaseMvRxFragment() {
     override fun onStart() {
         super.onStart()
         radioButtons = listOf<RadioButton>(
-            answer_1,answer_2,answer_3,answer_4,answer_5
+            answer_1, answer_2, answer_3, answer_4, answer_5
         )
         answer_group.setOnCheckedChangeListener { group, checkedId ->
-            withState(viewModel) { state ->
-                state.quiz(quizId)?.let{
-                    it.questions[current].selected = radioButtons.indexOf(group.findViewById(checkedId))
+            if (checkedId != -1) {
+                withState(viewModel) { state ->
+                    state.changeSelectedAnswer(quizId, current, radioButtons.indexOf(group.findViewById(checkedId)))
                 }
+                next_btn.isEnabled = true
             }
-            next_btn.isEnabled = true
         }
         next_btn.setOnClickListener {
             withState(viewModel) { state ->
                 state.quiz(quizId)?.questions?.let {
-                    if(current!= it.size) {
-                        state.changeProgress(quizId, current + 1)
+                    state.changeProgress(quizId, current + 1)
+                    if (current != it.size - 1) {
                         invalidate()
+                    } else {
+                        findNavController().navigate(
+                            R.id.action_solvingFragment_to_resultFragment,
+                            ResultFragment.arg(quizId),
+                            NavOptions.Builder()
+                                .setPopUpTo(R.id.quizesFragment,
+                                    false).build()
+                        )
                     }
                 }
             }
         }
         prev_btn.setOnClickListener {
-            if(current!=0){
+            if (current != 0) {
                 withState(viewModel) { state ->
                     state.changeProgress(quizId, current - 1)
                     invalidate()

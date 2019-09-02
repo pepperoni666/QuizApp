@@ -9,5 +9,11 @@
         <action android:id="@+id/action_quizesFragment_to_solvingFragment" app:destination="@id/solvingFragment"/>
     </fragment>
     <fragment android:id="@+id/solvingFragment" android:name="com.dummy.quiz_app.SolvingFragment"
-              android:label="fragment_solving" tools:layout="@layout/fragment_solving"/>
+              android:label="fragment_solving" tools:layout="@layout/fragment_solving">
+        <action android:id="@+id/action_solvingFragment_to_resultFragment" app:destination="@id/resultFragment"/>
+    </fragment>
+    <fragment android:id="@+id/resultFragment" android:name="com.dummy.quiz_app.ResultFragment"
+              android:label="fragment_result" tools:layout="@layout/fragment_result">
+        <action android:id="@+id/action_resultFragment_to_solvingFragment3" app:destination="@id/solvingFragment"/>
+    </fragment>
 </navigation>

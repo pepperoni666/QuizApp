@@ -7,22 +7,46 @@ import com.dummy.quiz_app.data.Question
 import com.dummy.quiz_app.data.Quiz
 
 data class QuizState(
-    val quizes: Async<List<Quiz>> = Uninitialized
+    val quizzes: Async<List<Quiz>> = Uninitialized
 ) : MvRxState {
-    fun quiz(quizId: Long?): Quiz? = quizes()?.firstOrNull { it.id == quizId }
 
+    /**
+     * Returns quiz object with given id,
+     * or null, in case of none was found.
+     * @param quizId
+     * @return - quiz object with given quizIz
+     */
+    fun quiz(quizId: Long?): Quiz? = quizzes()?.firstOrNull { it.id == quizId }
+
+    /**
+     * Changes current quiz solving state.
+     * Called when user wants to move between questions.
+     * @param quizId
+     * @param newProgress - new quiz solving state (current question)
+     */
     fun changeProgress(quizId: Long, newProgress: Int) {
-        quizes()?.firstOrNull { it.id == quizId }?.let { it.progress = newProgress }
+        quizzes()?.firstOrNull { it.id == quizId }?.let { it.progress = newProgress }
     }
 
+    /**
+     * Selects answer for current question.
+     * @param quizId
+     * @param progress - question posision of current quiz
+     * @param newSelected - selected answer
+     */
     fun changeSelectedAnswer(quizId: Long, progress: Int, newSelected: Int) {
-        quizes()?.firstOrNull { it.id == quizId }?.let {
+        quizzes()?.firstOrNull { it.id == quizId }?.let {
             it.questions[progress].selected = newSelected
         }
     }
 
+    /**
+     * Delete all answers for current quiz,
+     * and resets progress.
+     * @param quizId
+     */
     fun clearProgress(quizId: Long){
-        quizes()?.firstOrNull { it.id == quizId }?.let {
+        quizzes()?.firstOrNull { it.id == quizId }?.let {
             it.progress = 0
             for(i: Question in it.questions)
                 i.selected = null

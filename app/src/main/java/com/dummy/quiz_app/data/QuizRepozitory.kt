@@ -14,9 +14,16 @@ class QuizRepository: CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
     private val httpClient = OkHttpClient()
 
-    suspend fun getQuizes(): List<Quiz> = withContext(Dispatchers.IO) {
+    private val loadBy = 20
+    private var loadedCount = 0
+
+    /**
+     * Asynchronously loads quizzes
+     * @return - list of downloaded Quiz objects
+     */
+    suspend fun getQuizzes(): List<Quiz> = withContext(Dispatchers.IO) {
         val request = Request.Builder()
-            .url("http://quiz.o2.pl/api/v1/quizzes/0/100")
+            .url("http://quiz.o2.pl/api/v1/quizzes/$loadedCount/$loadBy")
             .build()
 
         val quizList = ArrayList<Quiz>()
@@ -24,7 +31,7 @@ class QuizRepository: CoroutineScope by CoroutineScope(Dispatchers.IO) {
         try {
             //set timeout for API response to 10s
             withTimeout(20000) {
-                //getting list of quizes
+                //getting list of quizzes
                 val response = httpClient.newCall(request).execute()
                 if (!response.isSuccessful){
                     val code = response.code()
@@ -139,6 +146,7 @@ class QuizRepository: CoroutineScope by CoroutineScope(Dispatchers.IO) {
                     for(i: Deferred<Unit> in awaitItems){
                         i.await()
                     }
+                    loadedCount += 1
                 }
             }
         } catch (e: TimeoutCancellationException) {

@@ -1,9 +1,6 @@
 package com.dummy.quiz_app
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,18 +14,21 @@ import kotlinx.android.synthetic.main.fragment_result.*
 
 class ResultFragment : BaseMvRxFragment() {
 
-    private val viewModel: QuizesViewModel by activityViewModel()
+    private val viewModel: QuizzesViewModel by activityViewModel()
     private val quizId: Long by args()
 
     override fun invalidate() = withState(viewModel) { state ->
         try {
             val quiz = state.quiz(quizId) ?: throw IllegalStateException("Cannot find quiz with id $quizId")
+            //calculate score points
             var score = 0
             for(i: Question in quiz.questions){
                 if (i.answers[i.selected!!].isCorrect)
                     score += 1
             }
+            //calculate score on %
             score = (score.toDouble() / quiz.questions.size.toDouble() * 100).toInt()
+            //select suitable rate message
             var rate = ""
             for (i: Rate in quiz.rates){
                 if(score <= i.to && score >= i.from)
@@ -66,7 +66,7 @@ class ResultFragment : BaseMvRxFragment() {
                 SolvingFragment.arg(quizId),
                 NavOptions.Builder()
                     .setPopUpTo(
-                        R.id.quizesFragment,
+                        R.id.quizzesFragment,
                         false
                     ).build()
             )

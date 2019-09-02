@@ -1,9 +1,6 @@
 package com.dummy.quiz_app
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +9,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.airbnb.mvrx.*
 import com.dummy.quiz_app.app.QuizApplication
-import com.dummy.quiz_app.data.Answer
 import kotlinx.android.synthetic.main.fragment_solving.*
 
 class SolvingFragment : BaseMvRxFragment() {
 
-    private val viewModel: QuizesViewModel by activityViewModel()
+    private val viewModel: QuizzesViewModel by activityViewModel()
     private val quizId: Long by args()
     private var current: Int = 0
     private lateinit var radioButtons: List<RadioButton>
@@ -37,14 +33,16 @@ class SolvingFragment : BaseMvRxFragment() {
                     ResultFragment.arg(quizId),
                     NavOptions.Builder()
                         .setPopUpTo(
-                            R.id.quizesFragment,
+                            R.id.quizzesFragment,
                             false
                         ).build()
                 )
                 return@withState
             }
+            //update progress
             progress_number.text = "$current/${quiz.questions.size}"
             progress_bar.progress = (current.toDouble() / quiz.questions.size.toDouble() * 100).toInt()
+            //change button sign from next to finish for last question
             next_btn.text =
                 if (current == quiz.questions.size - 1) getString(R.string.finish) else getString(R.string.next)
             question.text = quiz.questions[current].text
@@ -99,7 +97,7 @@ class SolvingFragment : BaseMvRxFragment() {
                             R.id.action_solvingFragment_to_resultFragment,
                             ResultFragment.arg(quizId),
                             NavOptions.Builder()
-                                .setPopUpTo(R.id.quizesFragment,
+                                .setPopUpTo(R.id.quizzesFragment,
                                     false).build()
                         )
                     }

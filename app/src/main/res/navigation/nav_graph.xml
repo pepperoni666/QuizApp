@@ -2,11 +2,11 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
-            app:startDestination="@id/quizesFragment">
+            app:startDestination="@id/quizzesFragment">
 
-    <fragment android:id="@+id/quizesFragment" android:name="com.dummy.quiz_app.QuizesFragment"
-              android:label="fragment_quizes" tools:layout="@layout/fragment_quizes">
-        <action android:id="@+id/action_quizesFragment_to_solvingFragment" app:destination="@id/solvingFragment"/>
+    <fragment android:id="@+id/quizzesFragment" android:name="com.dummy.quiz_app.QuizzesFragment"
+              android:label="fragment_quizzes" tools:layout="@layout/fragment_quizzes">
+        <action android:id="@+id/action_quizzesFragment_to_solvingFragment" app:destination="@id/solvingFragment"/>
     </fragment>
     <fragment android:id="@+id/solvingFragment" android:name="com.dummy.quiz_app.SolvingFragment"
               android:label="fragment_solving" tools:layout="@layout/fragment_solving">

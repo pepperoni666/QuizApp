@@ -49,7 +49,7 @@ class SolvingFragment : BaseMvRxFragment() {
             for (i in quiz.questions[current].answers.indices) {
                 radioButtons[i].visibility = View.VISIBLE
                 radioButtons[i].text = quiz.questions[current].answers[i].text
-                quiz.questions[current].selected.let {
+                quiz.questions[current].selected?.let {
                     if (i == it)
                         answer_group.check(radioButtons[i].id)
                 }

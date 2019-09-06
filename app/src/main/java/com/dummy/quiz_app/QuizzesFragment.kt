@@ -17,7 +17,7 @@ class QuizzesFragment : BaseMvRxFragment() {
     private val viewModel: QuizzesViewModel by activityViewModel()
 
     override fun invalidate() = withState(viewModel) { state ->
-        loadingAnimation.isVisible = state.quizzes is Loading
+        swiperefresh.isRefreshing = state.quizzes is Loading
         quizzesRecyclerView.withModels {
             state.quizzes()?.forEach { quiz ->
                 quizRaw {
@@ -44,6 +44,9 @@ class QuizzesFragment : BaseMvRxFragment() {
 
     override fun onStart() {
         super.onStart()
+        swiperefresh.setOnRefreshListener {
+            viewModel.refresh()
+        }
         return_top_btn.setOnClickListener {
             quizzesRecyclerView.smoothScrollToPosition(0)
             return_top_btn.visibility = View.GONE

@@ -8,11 +8,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class QuizApplication : Application() {
+
     init {
         instance = this
     }
 
-    val quizRepository = QuizRepository()
+    lateinit var quizRepository: QuizRepository
+
+    override fun onCreate() {
+        super.onCreate()
+        quizRepository = QuizRepository(this)
+    }
 
     companion object {
         private var instance: QuizApplication? = null

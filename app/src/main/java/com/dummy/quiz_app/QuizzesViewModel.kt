@@ -20,6 +20,23 @@ class QuizzesViewModel(
             copy(quizzes = Loading())
         }
         quizRepository.launch {
+            val list = if(quizRepository.isDBEmpty())
+                quizRepository.getQuizzes()
+            else
+                quizRepository.getSavedQuizzes()
+            setState {
+                copy(quizzes = Success(list))
+            }
+        }
+    }
+
+    fun refresh(){
+        setState {
+            copy(quizzes = Loading())
+        }
+        quizRepository.launch {
+            quizRepository.refreshLoadedCounter()
+            quizRepository.dropAllLocal()
             val list = quizRepository.getQuizzes()
             setState {
                 copy(quizzes = Success(list))
